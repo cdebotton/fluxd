@@ -6,4 +6,9 @@ var _interopRequire = function (obj) {
 
 var Fluxd = _interopRequire(require("./Fluxd"));
 
-module.exports = new Fluxd();
+var StoreListenerMixin = _interopRequire(require("./StoreListener"));
+
+var flux = new Fluxd();
+
+exports.flux = flux;
+exports.StoreListenerMixin = StoreListenerMixin;

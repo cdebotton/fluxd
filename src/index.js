@@ -1,3 +1,6 @@
 import Fluxd from './Fluxd';
+import StoreListenerMixin from './StoreListener';
 
-export default new Fluxd();
+var flux = new Fluxd();
+
+export {flux, StoreListenerMixin};
