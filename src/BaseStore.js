@@ -8,7 +8,7 @@ if (! Object.assign) {
   Object.assign = require('object-assign');
 }
 
-export default class Store {
+export default class BaseStore {
   constructor(dispatcher, state) {
     this[STATE_CONTAINER] = state;
     this[EVENT_EMITTER] = new EventEmitter();

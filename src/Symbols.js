@@ -1,5 +1,6 @@
 import Symbol from './polyfills/es6-symbol';
 
+var now = Date.now();
 var VariableSymbol = (desc) => Symbol(`${now}${desc}`);
 
 export const ACTION_DISPATCHER = Symbol('action dispatcher storage');

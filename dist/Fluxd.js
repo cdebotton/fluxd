@@ -5,9 +5,13 @@ var _interopRequire = function (obj) {
   return obj && (obj["default"] || obj);
 };
 
-var Store = _interopRequire(require("./Store"));
+var ActionCreator = _interopRequire(require("./ActionCreator"));
+
+var BaseStore = _interopRequire(require("./BaseStore"));
 
 var formatAsConstant = _interopRequire(require("./utils/formatAsConstant"));
+
+var StorePrototype = _interopRequire(require("./utils/StorePrototype"));
 
 var Symbol = _interopRequire(require("./polyfills/es6-symbol"));
 
@@ -19,6 +23,7 @@ var ACTION_KEY = require("./Symbols").ACTION_KEY;
 var STATE_CONTAINER = require("./Symbols").STATE_CONTAINER;
 var STORE_BOOTSTRAP = require("./Symbols").STORE_BOOTSTRAP;
 var STORE_SNAPSHOT = require("./Symbols").STORE_SNAPSHOT;
+var LISTENERS = require("./Symbols").LISTENERS;
 var builtIns = require("./utils/internalMethods").builtIns;
 var builtInProto = require("./utils/internalMethods").builtInProto;
 var getInternalMethods = require("./utils/internalMethods").getInternalMethods;
@@ -42,7 +47,7 @@ Fluxd.prototype.createStore = function (StoreModel, iden) {
   }
   Store.prototype = StoreModel.prototype;
   Store.prototype[LISTENERS] = {};
-  Object.assign(Store.prototype, StoreMixin, {
+  Object.assign(Store.prototype, StorePrototype, {
     _storeName: key,
     dispatcher: this.dispatcher,
     getInstance: function () {
@@ -56,13 +61,13 @@ Fluxd.prototype.createStore = function (StoreModel, iden) {
     throw new ReferenceError("A store named " + key + " already exists, double check your store names " + "or pass in your own custom identifier for eachs tore");
   }
 
-  return this[STORES_STORE][key] = Object.assign(new Store(this.dispatcher, store), getInternalMethods(StoreModel, builtIns));
+  return this[STORES_STORE][key] = Object.assign(new BaseStore(this.dispatcher, store), getInternalMethods(StoreModel, builtIns));
 };
 
 Fluxd.prototype.createActions = function (ActionsClass) {
   var _this2 = this;
   var key = ActionsClass.displayName || ActionsClass.name;
-  var actions = Object.assign({}, getInternalMethods(ActionsClass.protoype, builtInProto));
+  var actions = Object.assign({}, getInternalMethods(ActionsClass.prototype, builtInProto));
 
   ActionsClass.call({
     generateActions: function () {

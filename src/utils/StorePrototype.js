@@ -44,7 +44,6 @@ var StorePrototype = {
       else if (this[assumedEventHandler]) {
         handler = this[assumedEventHandler];
       }
-
       if (handler) {
         this.bindAction(symbol, handler);
       }

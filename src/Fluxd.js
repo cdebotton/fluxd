@@ -1,11 +1,13 @@
-import Store from './Store';
+import ActionCreator from './ActionCreator';
+import BaseStore from './BaseStore';
 import formatAsConstant from './utils/formatAsConstant';
+import StorePrototype from './utils/StorePrototype';
 import Symbol from './polyfills/es6-symbol';
 import {Dispatcher} from 'flux';
 
 import {
   STORES_STORE, BOOTSTRAP_FLAG, ACTION_HANDLER, ACTION_KEY,
-  STATE_CONTAINER, STORE_BOOTSTRAP, STORE_SNAPSHOT
+  STATE_CONTAINER, STORE_BOOTSTRAP, STORE_SNAPSHOT, LISTENERS
 } from './Symbols';
 
 import {
@@ -28,7 +30,7 @@ export default class Fluxd {
     function Store() { StoreModel.call(this); }
     Store.prototype = StoreModel.prototype;
     Store.prototype[LISTENERS] = {};
-    Object.assign(Store.prototype, StoreMixin, {
+    Object.assign(Store.prototype, StorePrototype, {
       _storeName: key,
       dispatcher: this.dispatcher,
       getInstance: () => this[STORES_STORE][key]
@@ -44,7 +46,7 @@ export default class Fluxd {
     }
 
     return this[STORES_STORE][key] = Object.assign(
-      new Store(this.dispatcher, store),
+      new BaseStore(this.dispatcher, store),
       getInternalMethods(StoreModel, builtIns)
     );
   }
@@ -53,7 +55,7 @@ export default class Fluxd {
     var key = ActionsClass.displayName || ActionsClass.name;
     var actions = Object.assign(
       {},
-      getInternalMethods(ActionsClass.protoype, builtInProto)
+      getInternalMethods(ActionsClass.prototype, builtInProto)
     );
 
     ActionsClass.call({

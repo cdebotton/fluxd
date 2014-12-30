@@ -8,7 +8,7 @@ export default {
   },
 
   listenTo(store, handler) {
-    this[MIXIN_REGISTRY] ?= [];
+    this[MIXIN_REGISTRY] = this[MIXIN_REGISTRY] || [];
     this[MIXIN_REGISTRY].push({store: store, handler: handler});
     store.listen(handler);
   }

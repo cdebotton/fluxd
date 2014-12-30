@@ -6,6 +6,7 @@ var _interopRequire = function (obj) {
 
 var Symbol = _interopRequire(require("./polyfills/es6-symbol"));
 
+var now = Date.now();
 var VariableSymbol = function (desc) {
   return Symbol("" + now + "" + desc);
 };
