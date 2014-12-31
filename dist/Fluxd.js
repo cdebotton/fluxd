@@ -7,9 +7,15 @@ var _interopRequire = function (obj) {
 
 var ActionCreator = _interopRequire(require("./ActionCreator"));
 
+var BaseAdapter = _interopRequire(require("./BaseAdapter"));
+
 var BaseStore = _interopRequire(require("./BaseStore"));
 
+var formatAsResource = _interopRequire(require("./utils/formatAsResource"));
+
 var formatAsConstant = _interopRequire(require("./utils/formatAsConstant"));
+
+var AdapterPrototype = _interopRequire(require("./utils/AdapterPrototype"));
 
 var StorePrototype = _interopRequire(require("./utils/StorePrototype"));
 
@@ -24,6 +30,7 @@ var STATE_CONTAINER = require("./Symbols").STATE_CONTAINER;
 var STORE_BOOTSTRAP = require("./Symbols").STORE_BOOTSTRAP;
 var STORE_SNAPSHOT = require("./Symbols").STORE_SNAPSHOT;
 var LISTENERS = require("./Symbols").LISTENERS;
+var ADAPTERS_STORE = require("./Symbols").ADAPTERS_STORE;
 var builtIns = require("./utils/internalMethods").builtIns;
 var builtInProto = require("./utils/internalMethods").builtInProto;
 var getInternalMethods = require("./utils/internalMethods").getInternalMethods;
@@ -36,6 +43,7 @@ if (!Object.assign) {
 var Fluxd = function Fluxd() {
   this.dispatcher = new Dispatcher();
   this[STORES_STORE] = {};
+  this[ADAPTERS_STORE] = {};
   this[BOOTSTRAP_FLAG] = false;
 };
 
@@ -58,7 +66,7 @@ Fluxd.prototype.createStore = function (StoreModel, iden) {
   var store = new Store();
 
   if (this[STORES_STORE][key]) {
-    throw new ReferenceError("A store named " + key + " already exists, double check your store names " + "or pass in your own custom identifier for eachs tore");
+    throw new ReferenceError("A store named " + key + " already exists, double check your store names " + "or pass in your own custom identifier for each store");
   }
 
   return this[STORES_STORE][key] = Object.assign(new BaseStore(this.dispatcher, store), getInternalMethods(StoreModel, builtIns));
@@ -100,6 +108,29 @@ Fluxd.prototype.createActions = function (ActionsClass) {
 
     return obj;
   }, {});
+};
+
+Fluxd.prototype.createAdapter = function (AdapterClass) {
+  var key = AdapterClass.displayName || AdapterClass.name;
+  var resource = formatAsResource(key);
+  var config = {};
+
+  AdapterClass.call({
+    configure: function (params) {
+      Object.assign(config, params);
+    }
+  });
+
+  function Adapter() {
+    AdapterClass.call(this);
+  }
+  Adapter.prototype = AdapterClass.prototype;
+
+  var adapter = Object.assign(new BaseAdapter(config.root, resource), getInternalMethods(AdapterClass, builtIns));
+
+  // need to set new ActionCreators to adapter.
+
+  adapter.find();
 };
 
 Fluxd.prototype.takeSnapshot = function () {

@@ -1,13 +1,17 @@
 import ActionCreator from './ActionCreator';
+import BaseAdapter from './BaseAdapter';
 import BaseStore from './BaseStore';
+import formatAsResource from './utils/formatAsResource';
 import formatAsConstant from './utils/formatAsConstant';
+import AdapterPrototype from './utils/AdapterPrototype';
 import StorePrototype from './utils/StorePrototype';
 import Symbol from './polyfills/es6-symbol';
 import {Dispatcher} from 'flux';
 
 import {
   STORES_STORE, BOOTSTRAP_FLAG, ACTION_HANDLER, ACTION_KEY,
-  STATE_CONTAINER, STORE_BOOTSTRAP, STORE_SNAPSHOT, LISTENERS
+  STATE_CONTAINER, STORE_BOOTSTRAP, STORE_SNAPSHOT, LISTENERS,
+  ADAPTERS_STORE
 } from './Symbols';
 
 import {
@@ -22,6 +26,7 @@ export default class Fluxd {
   constructor() {
     this.dispatcher = new Dispatcher();
     this[STORES_STORE] = {};
+    this[ADAPTERS_STORE] = {};
     this[BOOTSTRAP_FLAG] = false;
   }
 
@@ -41,7 +46,7 @@ export default class Fluxd {
     if (this[STORES_STORE][key]) {
       throw new ReferenceError(
         `A store named ${key} already exists, double check your store names ` +
-        `or pass in your own custom identifier for eachs tore`
+        `or pass in your own custom identifier for each store`
       );
     }
 
@@ -86,6 +91,30 @@ export default class Fluxd {
 
       return obj;
     }, {});
+  }
+
+  createAdapter(AdapterClass) {
+    var key = AdapterClass.displayName || AdapterClass.name;
+    var resource = formatAsResource(key);
+    var config = {};
+
+    AdapterClass.call({
+      configure(params) {
+        Object.assign(config, params);
+      }
+    });
+
+    function Adapter() { AdapterClass.call(this); }
+    Adapter.prototype = AdapterClass.prototype;
+
+    var adapter = Object.assign(
+      new BaseAdapter(config.root, resource),
+      getInternalMethods(AdapterClass, builtIns)
+    );
+
+    // need to set new ActionCreators to adapter.
+
+    adapter.find();
   }
 
   takeSnapshot() {

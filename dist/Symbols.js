@@ -15,6 +15,9 @@ var ACTION_DISPATCHER = exports.ACTION_DISPATCHER = Symbol("action dispatcher st
 var ACTION_HANDLER = exports.ACTION_HANDLER = Symbol("action creator handler");
 var ACTION_UID = exports.ACTION_UID = Symbol("the actions uid name");
 var ACTION_KEY = exports.ACTION_KEY = Symbol("holds the actions uid symbol for listening");
+var ADAPTERS_STORE = exports.ADAPTERS_STORE = Symbol("adapters storage");
+var ADAPTER_RESOURCE = exports.ADAPTER_RESOURCE = Symbol("stores the resource of the adapter");
+var ADAPTER_ROOT = exports.ADAPTER_ROOT = Symbol("stores the root url of the adapter");
 var CHANGE_EVENT = exports.CHANGE_EVENT = Symbol("store change event");
 var EVENT_EMITTER = exports.EVENT_EMITTER = Symbol("event emitter instance");
 var STORE_BOOTSTRAP = exports.STORE_BOOTSTRAP = Symbol("event handler onBootstrap");

@@ -40,6 +40,7 @@ var StorePrototype = {
       } else if (_this[assumedEventHandler]) {
         handler = _this[assumedEventHandler];
       }
+
       if (handler) {
         _this.bindAction(symbol, handler);
       }
