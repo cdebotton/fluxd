@@ -112,9 +112,20 @@ export default class Fluxd {
       getInternalMethods(AdapterClass, builtIns)
     );
 
-    // need to set new ActionCreators to adapter.
+    var actions = Object.assign(
+      getInternalMethods(BaseAdapter.prototype, builtInProto),
+      getInternalMethods(AdapterClass.prototype, builtInProto)
+    );
 
-    adapter.find();
+    return Object.keys(actions).reduce((obj, action) => {
+      var resourceSuffix = resource.replace(/./, (x) => x.toUpperCase());
+      var actionStr = `${action}${resourceSuffix}`;
+      var constant = formatAsConstant(actionStr);
+      var actionName = Symbol(`action ${key}.prototype.${action}`);
+      console.log(constant, `action ${key}.prototype.${action}`);
+
+      return obj;
+    }, {});
   }
 
   takeSnapshot() {

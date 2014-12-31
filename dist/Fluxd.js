@@ -128,9 +128,19 @@ Fluxd.prototype.createAdapter = function (AdapterClass) {
 
   var adapter = Object.assign(new BaseAdapter(config.root, resource), getInternalMethods(AdapterClass, builtIns));
 
-  // need to set new ActionCreators to adapter.
+  var actions = Object.assign(getInternalMethods(BaseAdapter.prototype, builtInProto), getInternalMethods(AdapterClass.prototype, builtInProto));
 
-  adapter.find();
+  return Object.keys(actions).reduce(function (obj, action) {
+    var resourceSuffix = resource.replace(/./, function (x) {
+      return x.toUpperCase();
+    });
+    var actionStr = "" + action + "" + resourceSuffix;
+    var constant = formatAsConstant(actionStr);
+    var actionName = Symbol("action " + key + ".prototype." + action);
+    console.log(constant, "action " + key + ".prototype." + action);
+
+    return obj;
+  }, {});
 };
 
 Fluxd.prototype.takeSnapshot = function () {
