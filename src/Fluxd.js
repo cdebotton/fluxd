@@ -11,7 +11,7 @@ import {Dispatcher} from 'flux';
 import {
   STORES_STORE, BOOTSTRAP_FLAG, ACTION_HANDLER, ACTION_KEY,
   STATE_CONTAINER, STORE_BOOTSTRAP, STORE_SNAPSHOT, LISTENERS,
-  ADAPTERS_STORE
+  ADAPTERS_STORE, ADAPTER_ROOT, ADAPTER_RESOURCE
 } from './Symbols';
 
 import {
@@ -122,8 +122,22 @@ export default class Fluxd {
       var actionStr = `${action}${resourceSuffix}`;
       var constant = formatAsConstant(actionStr);
       var actionName = Symbol(`action ${key}.prototype.${action}`);
-      console.log(constant, `action ${key}.prototype.${action}`);
 
+      var newAction = new ActionCreator(
+        this.dispatcher,
+        actionName,
+        adapter[action],
+        obj,
+        config.root,
+        resource
+      );
+
+      obj[ADAPTER_ROOT] = config.root;
+      obj[ADAPTER_RESOURCE] = resource;
+      obj[action] = newAction[ACTION_HANDLER];
+      obj[action].defer = (x) => setTimeout(() => newAction[ACTION_HANDLER](x));
+      obj[action][ACTION_KEY] = actionName;
+      obj[constant] = actionName;
       return obj;
     }, {});
   }

@@ -31,6 +31,8 @@ var STORE_BOOTSTRAP = require("./Symbols").STORE_BOOTSTRAP;
 var STORE_SNAPSHOT = require("./Symbols").STORE_SNAPSHOT;
 var LISTENERS = require("./Symbols").LISTENERS;
 var ADAPTERS_STORE = require("./Symbols").ADAPTERS_STORE;
+var ADAPTER_ROOT = require("./Symbols").ADAPTER_ROOT;
+var ADAPTER_RESOURCE = require("./Symbols").ADAPTER_RESOURCE;
 var builtIns = require("./utils/internalMethods").builtIns;
 var builtInProto = require("./utils/internalMethods").builtInProto;
 var getInternalMethods = require("./utils/internalMethods").getInternalMethods;
@@ -111,6 +113,7 @@ Fluxd.prototype.createActions = function (ActionsClass) {
 };
 
 Fluxd.prototype.createAdapter = function (AdapterClass) {
+  var _this3 = this;
   var key = AdapterClass.displayName || AdapterClass.name;
   var resource = formatAsResource(key);
   var config = {};
@@ -137,19 +140,30 @@ Fluxd.prototype.createAdapter = function (AdapterClass) {
     var actionStr = "" + action + "" + resourceSuffix;
     var constant = formatAsConstant(actionStr);
     var actionName = Symbol("action " + key + ".prototype." + action);
-    console.log(constant, "action " + key + ".prototype." + action);
 
+    var newAction = new ActionCreator(_this3.dispatcher, actionName, adapter[action], obj, config.root, resource);
+
+    obj[ADAPTER_ROOT] = config.root;
+    obj[ADAPTER_RESOURCE] = resource;
+    obj[action] = newAction[ACTION_HANDLER];
+    obj[action].defer = function (x) {
+      return setTimeout(function () {
+        return newAction[ACTION_HANDLER](x);
+      });
+    };
+    obj[action][ACTION_KEY] = actionName;
+    obj[constant] = actionName;
     return obj;
   }, {});
 };
 
 Fluxd.prototype.takeSnapshot = function () {
-  var _this3 = this;
+  var _this4 = this;
   var state = JSON.stringify(Object.keys(this[STORES_STORE]).reduce(function (obj, key) {
-    if (_this3[STORES_STORE][key][STORE_SNAPSHOT]) {
-      _this3[STORES_STORE][key][STORE_SNAPSHOT]();
+    if (_this4[STORES_STORE][key][STORE_SNAPSHOT]) {
+      _this4[STORES_STORE][key][STORE_SNAPSHOT]();
     }
-    obj[key] = _this3[STORES_STORE][key].getState();
+    obj[key] = _this4[STORES_STORE][key].getState();
     return obj;
   }, {}));
 
@@ -163,16 +177,16 @@ Fluxd.prototype.rollback = function () {
 };
 
 Fluxd.prototype.bootstrap = function (data) {
-  var _this4 = this;
+  var _this5 = this;
   if (this[BOOTSTRAP_FLAG]) {
     throw new ReferenceError("Stores have already been bootstrapped");
   }
 
   var obj = JSON.parse(data);
   Object.keys(obj).forEach(function (key) {
-    Object.assign(_this4[STORES_STORE][key][STATE_CONTAINER], obj[key]);
-    if (_this4[STORES_STORE][key][STORE_BOOTSTRAP]) {
-      _this4[STORES_STORE][key][STORE_BOOTSTRAP]();
+    Object.assign(_this5[STORES_STORE][key][STATE_CONTAINER], obj[key]);
+    if (_this5[STORES_STORE][key][STORE_BOOTSTRAP]) {
+      _this5[STORES_STORE][key][STORE_BOOTSTRAP]();
     }
   });
 

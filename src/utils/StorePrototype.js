@@ -46,6 +46,7 @@ var StorePrototype = {
       }
 
       if (handler) {
+        console.log(assumedEventHandler);
         this.bindAction(symbol, handler);
       }
     });

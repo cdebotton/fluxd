@@ -12,23 +12,22 @@ var Request = _interopRequire(require("superagent"));
 var flux = require("../").flux;
 var ACTION_DISPATCHER = require("./Symbols").ACTION_DISPATCHER;
 var ADAPTER_ROOT = require("./Symbols").ADAPTER_ROOT;
+var ADAPTER_RESOURCE = require("./Symbols").ADAPTER_RESOURCE;
 
 
 var TIMEOUT = 10000;
 
 var RESOURCE = Symbol("store adapter resource");
 
-var BaseAdapter = function BaseAdapter(root, resource, actions) {
-  this[ADAPTER_ROOT] = root;
-  this[RESOURCE] = resource;
-};
+var BaseAdapter = function BaseAdapter() {};
 
 BaseAdapter.prototype.find = function (id) {
   if (id === undefined) id = null;
-  var url = makeUrl(this[ADAPTER_ROOT], this[RESOURCE], id);
+  var url = makeUrl(this[ADAPTER_ROOT], this[ADAPTER_RESOURCE], id);
   var request = Request.get(url);
+  this.dispatch("PENDING");
 
-  return generatePromise(request).then(digestResponse(this[RESOURCE]))["catch"](rejectResponse(this[RESOURCE]));
+  return generatePromise(request).then(digestResponse(this.dispatch.bind(this), this[ADAPTER_RESOURCE]))["catch"](rejectResponse(this[ADAPTER_RESOURCE]));
 };
 
 BaseAdapter.prototype.save = function (params) {
@@ -50,8 +49,10 @@ var makeUrl = function () {
   }).join("/");
 };
 
-var digestResponse = function (resource) {
-  return function (response) {};
+var digestResponse = function (dispatch, resource) {
+  return function (response) {
+    dispatch(response.body);
+  };
 };
 
 
