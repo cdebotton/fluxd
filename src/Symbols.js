@@ -6,6 +6,7 @@ var VariableSymbol = (desc) => Symbol(`${now}${desc}`);
 export const ACTION_DISPATCHER = Symbol('action dispatcher storage');
 export const ACTION_HANDLER = Symbol('action creator handler');
 export const ACTION_UID = Symbol('the actions uid name');
+export const ACTION_BINDING = Symbol('the action binding key');
 export const ACTION_KEY = Symbol('holds the actions uid symbol for listening');
 export const ADAPTERS_STORE = Symbol('adapters storage');
 export const ADAPTER_RESOURCE = Symbol('stores the resource of the adapter');

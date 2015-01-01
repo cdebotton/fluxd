@@ -1,4 +1,4 @@
-import {ACTION_KEY, LISTENERS} from '../Symbols';
+import {ACTION_KEY, LISTENERS, ACTION_BINDING} from '../Symbols';
 
 var StorePrototype = {
   bindAction(symbol, handler) {
@@ -29,24 +29,24 @@ var StorePrototype = {
   bindActions(actions) {
     Object.keys(actions).forEach(action => {
       var symbol = actions[action];
-      var assumedEventHandler = action.replace(/./, x => `on${x[0].toUpperCase()}`);
+      var binding = actions[action][ACTION_BINDING] || action;
+      var assumedEventHandler = binding.replace(/./, x => `on${x[0].toUpperCase()}`);
       var handler = null;
 
-      if (this[action] && this[assumedEventHandler]) {
+      if (this[binding] && this[assumedEventHandler]) {
         throw new ReferenceError(
           `You have multiple action handlers bound to an action: ` +
           `${action} and ${assumedEventHandler}`
         );
       }
-      else if (this[action]) {
-        handler = this[action];
+      else if (this[binding]) {
+        handler = this[binding];
       }
       else if (this[assumedEventHandler]) {
         handler = this[assumedEventHandler];
       }
 
       if (handler) {
-        console.log(assumedEventHandler);
         this.bindAction(symbol, handler);
       }
     });

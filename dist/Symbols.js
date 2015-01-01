@@ -14,6 +14,7 @@ var VariableSymbol = function (desc) {
 var ACTION_DISPATCHER = exports.ACTION_DISPATCHER = Symbol("action dispatcher storage");
 var ACTION_HANDLER = exports.ACTION_HANDLER = Symbol("action creator handler");
 var ACTION_UID = exports.ACTION_UID = Symbol("the actions uid name");
+var ACTION_BINDING = exports.ACTION_BINDING = Symbol("the action binding key");
 var ACTION_KEY = exports.ACTION_KEY = Symbol("holds the actions uid symbol for listening");
 var ADAPTERS_STORE = exports.ADAPTERS_STORE = Symbol("adapters storage");
 var ADAPTER_RESOURCE = exports.ADAPTER_RESOURCE = Symbol("stores the resource of the adapter");

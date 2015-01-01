@@ -33,6 +33,7 @@ var LISTENERS = require("./Symbols").LISTENERS;
 var ADAPTERS_STORE = require("./Symbols").ADAPTERS_STORE;
 var ADAPTER_ROOT = require("./Symbols").ADAPTER_ROOT;
 var ADAPTER_RESOURCE = require("./Symbols").ADAPTER_RESOURCE;
+var ACTION_BINDING = require("./Symbols").ACTION_BINDING;
 var builtIns = require("./utils/internalMethods").builtIns;
 var builtInProto = require("./utils/internalMethods").builtInProto;
 var getInternalMethods = require("./utils/internalMethods").getInternalMethods;
@@ -106,6 +107,7 @@ Fluxd.prototype.createActions = function (ActionsClass) {
       });
     };
     obj[action][ACTION_KEY] = actionName;
+    obj[action][ACTION_BINDING] = action;
     obj[constant] = actionName;
 
     return obj;
@@ -152,6 +154,7 @@ Fluxd.prototype.createAdapter = function (AdapterClass) {
       });
     };
     obj[action][ACTION_KEY] = actionName;
+    obj[action][ACTION_BINDING] = actionStr;
     obj[constant] = actionName;
     return obj;
   }, {});

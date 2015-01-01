@@ -11,7 +11,7 @@ import {Dispatcher} from 'flux';
 import {
   STORES_STORE, BOOTSTRAP_FLAG, ACTION_HANDLER, ACTION_KEY,
   STATE_CONTAINER, STORE_BOOTSTRAP, STORE_SNAPSHOT, LISTENERS,
-  ADAPTERS_STORE, ADAPTER_ROOT, ADAPTER_RESOURCE
+  ADAPTERS_STORE, ADAPTER_ROOT, ADAPTER_RESOURCE, ACTION_BINDING
 } from './Symbols';
 
 import {
@@ -87,6 +87,7 @@ export default class Fluxd {
       obj[action] = newAction[ACTION_HANDLER];
       obj[action].defer = (x) => setTimeout(() => newAction[ACTION_HANDLER](x));
       obj[action][ACTION_KEY] = actionName;
+      obj[action][ACTION_BINDING] = action;
       obj[constant] = actionName;
 
       return obj;
@@ -137,6 +138,7 @@ export default class Fluxd {
       obj[action] = newAction[ACTION_HANDLER];
       obj[action].defer = (x) => setTimeout(() => newAction[ACTION_HANDLER](x));
       obj[action][ACTION_KEY] = actionName;
+      obj[action][ACTION_BINDING] = actionStr;
       obj[constant] = actionName;
       return obj;
     }, {});

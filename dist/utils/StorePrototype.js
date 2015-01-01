@@ -2,6 +2,7 @@
 
 var ACTION_KEY = require("../Symbols").ACTION_KEY;
 var LISTENERS = require("../Symbols").LISTENERS;
+var ACTION_BINDING = require("../Symbols").ACTION_BINDING;
 
 
 var StorePrototype = {
@@ -28,21 +29,21 @@ var StorePrototype = {
     var _this = this;
     Object.keys(actions).forEach(function (action) {
       var symbol = actions[action];
-      var assumedEventHandler = action.replace(/./, function (x) {
+      var binding = actions[action][ACTION_BINDING] || action;
+      var assumedEventHandler = binding.replace(/./, function (x) {
         return "on" + x[0].toUpperCase();
       });
       var handler = null;
 
-      if (_this[action] && _this[assumedEventHandler]) {
+      if (_this[binding] && _this[assumedEventHandler]) {
         throw new ReferenceError("You have multiple action handlers bound to an action: " + ("" + action + " and " + assumedEventHandler));
-      } else if (_this[action]) {
-        handler = _this[action];
+      } else if (_this[binding]) {
+        handler = _this[binding];
       } else if (_this[assumedEventHandler]) {
         handler = _this[assumedEventHandler];
       }
 
       if (handler) {
-        console.log(assumedEventHandler);
         _this.bindAction(symbol, handler);
       }
     });
