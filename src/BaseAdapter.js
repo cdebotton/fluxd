@@ -2,20 +2,19 @@ import Promise from 'bluebird';
 import Request from 'superagent';
 import {flux} from '../';
 import {
-  ACTION_DISPATCHER, ADAPTER_ROOT, ADAPTER_RESOURCE
+  ACTION_DISPATCHER, ADAPTER_ROOT, ADAPTER_RESOURCE,
+  ADAPTER_PENDING, ADAPTER_ERROR, ADAPTER_BAD_REQUEST,
+  ADAPTER_TIMEOUT
 } from './Symbols';
 
 const TIMEOUT = 10000
 
-const RESOURCE = Symbol('store adapter resource');
-
 export default class BaseAdapter {
-  constructor() {}
-
   find(id = null) {
     var url = makeUrl(this[ADAPTER_ROOT], this[ADAPTER_RESOURCE], id);
     var request = Request.get(url);
-    this.dispatch('PENDING');
+
+    this.dispatch(ADAPTER_PENDING);
 
     return generatePromise(request)
       .then(digestResponse(this.dispatch.bind(this), this[ADAPTER_RESOURCE]))
@@ -42,7 +41,7 @@ var digestResponse = (dispatch, resource) => {
 
 var rejectResponse = (resource) => {
   return function(err) {
-
+    console.error(err);
   }
 };
 

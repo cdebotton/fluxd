@@ -145,8 +145,6 @@ Fluxd.prototype.createAdapter = function (AdapterClass) {
 
     var newAction = new ActionCreator(_this3.dispatcher, actionName, adapter[action], obj, config.root, resource);
 
-    obj[ADAPTER_ROOT] = config.root;
-    obj[ADAPTER_RESOURCE] = resource;
     obj[action] = newAction[ACTION_HANDLER];
     obj[action].defer = function (x) {
       return setTimeout(function () {
@@ -156,6 +154,7 @@ Fluxd.prototype.createAdapter = function (AdapterClass) {
     obj[action][ACTION_KEY] = actionName;
     obj[action][ACTION_BINDING] = actionStr;
     obj[constant] = actionName;
+
     return obj;
   }, {});
 };

@@ -1,7 +1,6 @@
-import Fluxd from './Fluxd';
+import Flux from './Fluxd';
 import StoreListenerMixin from './StoreListener';
 import RESTAdapter from './RESTAdapter';
+import Constants from './Symbols';
 
-var flux = new Fluxd();
-
-export {flux, StoreListenerMixin};
+export {Flux, StoreListenerMixin, Constants};

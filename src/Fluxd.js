@@ -133,13 +133,12 @@ export default class Fluxd {
         resource
       );
 
-      obj[ADAPTER_ROOT] = config.root;
-      obj[ADAPTER_RESOURCE] = resource;
       obj[action] = newAction[ACTION_HANDLER];
       obj[action].defer = (x) => setTimeout(() => newAction[ACTION_HANDLER](x));
       obj[action][ACTION_KEY] = actionName;
       obj[action][ACTION_BINDING] = actionStr;
       obj[constant] = actionName;
+
       return obj;
     }, {});
   }

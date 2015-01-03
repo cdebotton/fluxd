@@ -13,11 +13,13 @@ var flux = require("../").flux;
 var ACTION_DISPATCHER = require("./Symbols").ACTION_DISPATCHER;
 var ADAPTER_ROOT = require("./Symbols").ADAPTER_ROOT;
 var ADAPTER_RESOURCE = require("./Symbols").ADAPTER_RESOURCE;
+var ADAPTER_PENDING = require("./Symbols").ADAPTER_PENDING;
+var ADAPTER_ERROR = require("./Symbols").ADAPTER_ERROR;
+var ADAPTER_BAD_REQUEST = require("./Symbols").ADAPTER_BAD_REQUEST;
+var ADAPTER_TIMEOUT = require("./Symbols").ADAPTER_TIMEOUT;
 
 
 var TIMEOUT = 10000;
-
-var RESOURCE = Symbol("store adapter resource");
 
 var BaseAdapter = function BaseAdapter() {};
 
@@ -25,7 +27,8 @@ BaseAdapter.prototype.find = function (id) {
   if (id === undefined) id = null;
   var url = makeUrl(this[ADAPTER_ROOT], this[ADAPTER_RESOURCE], id);
   var request = Request.get(url);
-  this.dispatch("PENDING");
+
+  this.dispatch(ADAPTER_PENDING);
 
   return generatePromise(request).then(digestResponse(this.dispatch.bind(this), this[ADAPTER_RESOURCE]))["catch"](rejectResponse(this[ADAPTER_RESOURCE]));
 };
@@ -57,7 +60,9 @@ var digestResponse = function (dispatch, resource) {
 
 
 var rejectResponse = function (resource) {
-  return function (err) {};
+  return function (err) {
+    console.error(err);
+  };
 };
 
 var generatePromise = function (request) {

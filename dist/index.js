@@ -4,13 +4,14 @@ var _interopRequire = function (obj) {
   return obj && (obj["default"] || obj);
 };
 
-var Fluxd = _interopRequire(require("./Fluxd"));
+var Flux = _interopRequire(require("./Fluxd"));
 
 var StoreListenerMixin = _interopRequire(require("./StoreListener"));
 
 var RESTAdapter = _interopRequire(require("./RESTAdapter"));
 
-var flux = new Fluxd();
+var Constants = _interopRequire(require("./Symbols"));
 
-exports.flux = flux;
+exports.Flux = Flux;
 exports.StoreListenerMixin = StoreListenerMixin;
+exports.Constants = Constants;
