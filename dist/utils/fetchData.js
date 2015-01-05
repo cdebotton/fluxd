@@ -1,14 +1,24 @@
 "use strict";
 
 module.exports = fetchData;
-function fetchData(routes, params, query) {
+var BOOTSTRAPPED = false;
+
+function fetchData(state) {
+  var routes = state.routes;
+  var params = state.params;
+  var query = state.query;
   var promiseArray = generatePromises(routes, params, query);
 
-  return Promise.all(promiseArray).then(function (data) {
-    return data.reduce(function (memo, item) {
-      return Object.assign(memo, item);
-    }, {});
-  });
+  if (!BOOTSTRAPPED) {
+    BOOTSTRAPPED = true;
+    return Promise.all(promiseArray).then(function (data) {
+      return data.reduce(function (memo, item) {
+        return Object.assign(memo, item);
+      }, {});
+    });
+  } else {
+    return Promise.resolve(true);
+  }
 }
 
 function generatePromises(routes, params, query) {

@@ -62,26 +62,26 @@ export default class BaseStore {
   }
 
   isError() {
-    return this.status &&
-      hasOwnProperty(this.status, 'type') &&
-      this.status.type == ADAPTER_ERROR;
+    var status = this[STATE_CONTAINER].status;
+    return status && hasOwnProperty.call(status, 'type') &&
+      status.type === ADAPTER_ERROR;
   }
 
   isTimeout() {
-    return this.status &&
-      hasOwnProperty(this.status, 'type') &&
-      this.status.type == ADAPTER_TIMEOUT;
+    var status = this[STATE_CONTAINER].status;
+    return status && hasOwnProperty.call(status, 'type') &&
+      status.type === ADAPTER_TIMEOUT;
   }
 
   isBadRequest() {
-    return this.status &&
-      hasOwnProperty(this.status, 'type') &&
-      this.status.type == ADAPTER_BAD_REQUEST;
+    var status = this[STATE_CONTAINER].status;
+    return status && hasOwnProperty.call(status, 'type') &&
+      status.type === ADAPTER_BAD_REQUEST;
   }
 
   isPending() {
-    return this.status &&
-      hasOwnProperty(this.status, 'type') &&
-      this.status.type == ADAPTER_PENDING;
+    var status = this[STATE_CONTAINER].status;
+    return status && hasOwnProperty.call(status, 'type') &&
+      status.type === ADAPTER_PENDING;
   }
 }

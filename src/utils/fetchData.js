@@ -1,10 +1,19 @@
-export default function fetchData(routes, params, query) {
+var BOOTSTRAPPED = false;
+
+export default function fetchData(state) {
+  var {routes, params, query} = state;
   var promiseArray = generatePromises(routes, params, query);
 
-  return Promise.all(promiseArray)
-    .then(data => data.reduce((memo, item) => {
-      return Object.assign(memo, item);
-    }, {}));
+  if (! BOOTSTRAPPED) {
+    BOOTSTRAPPED = true;
+    return Promise.all(promiseArray)
+      .then(data => data.reduce((memo, item) => {
+        return Object.assign(memo, item);
+      }, {}));
+  }
+  else {
+    return Promise.resolve(true);
+  }
 };
 
 function generatePromises(routes, params, query) {

@@ -73,19 +73,23 @@ BaseStore.prototype.getState = function () {
 };
 
 BaseStore.prototype.isError = function () {
-  return this.status && hasOwnProperty(this.status, "type") && this.status.type == ADAPTER_ERROR;
+  var status = this[STATE_CONTAINER].status;
+  return status && hasOwnProperty.call(status, "type") && status.type === ADAPTER_ERROR;
 };
 
 BaseStore.prototype.isTimeout = function () {
-  return this.status && hasOwnProperty(this.status, "type") && this.status.type == ADAPTER_TIMEOUT;
+  var status = this[STATE_CONTAINER].status;
+  return status && hasOwnProperty.call(status, "type") && status.type === ADAPTER_TIMEOUT;
 };
 
 BaseStore.prototype.isBadRequest = function () {
-  return this.status && hasOwnProperty(this.status, "type") && this.status.type == ADAPTER_BAD_REQUEST;
+  var status = this[STATE_CONTAINER].status;
+  return status && hasOwnProperty.call(status, "type") && status.type === ADAPTER_BAD_REQUEST;
 };
 
 BaseStore.prototype.isPending = function () {
-  return this.status && hasOwnProperty(this.status, "type") && this.status.type == ADAPTER_PENDING;
+  var status = this[STATE_CONTAINER].status;
+  return status && hasOwnProperty.call(status, "type") && status.type === ADAPTER_PENDING;
 };
 
 module.exports = BaseStore;
