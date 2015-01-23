@@ -8,8 +8,6 @@ var Flux = _interopRequire(require("./Fluxd"));
 
 var StoreListenerMixin = _interopRequire(require("./StoreListener"));
 
-var RESTAdapter = _interopRequire(require("./RESTAdapter"));
-
 var Constants = _interopRequire(require("./Symbols"));
 
 var fetchData = _interopRequire(require("./utils/fetchData"));

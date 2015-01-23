@@ -15,8 +15,6 @@ var formatAsResource = _interopRequire(require("./utils/formatAsResource"));
 
 var formatAsConstant = _interopRequire(require("./utils/formatAsConstant"));
 
-var AdapterPrototype = _interopRequire(require("./utils/AdapterPrototype"));
-
 var StorePrototype = _interopRequire(require("./utils/StorePrototype"));
 
 var Symbol = _interopRequire(require("./polyfills/es6-symbol"));
