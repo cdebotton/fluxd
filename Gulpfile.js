@@ -1,24 +1,12 @@
 'use strict';
 
-var gulp = require('gulp');
-var to5 = require('gulp-6to5');
-var pruno = require('pruno').use(gulp);
-var config = pruno.config;
+var pruno = require('pruno')
+       .use(require('gulp'));
 
-config.srcDir = 'src';
-config.output = './dist/';
+require('./mixes/to5Task');
 
-pruno.extend('to5', function() {
-  gulp.task('to5', function() {
-    return gulp.src('./src/**/*.js')
-      .pipe(to5())
-      .pipe(gulp.dest('./dist/'));
-  });
-  config.registerWatcher('to5', './src/**/*.js');
-  return config.queueTask('to5');
-});
-
-pruno(function(runner) {
-  runner.del('./dist');
-  runner.to5();
+pruno(function(mix) {
+  mix
+    .del('./dist')
+    .to5();
 });
