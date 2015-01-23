@@ -81,7 +81,7 @@ Fluxd.prototype.createActions = function (ActionsClass) {
   var actions = Object.assign({}, getInternalMethods(ActionsClass.prototype, builtInProto));
 
   ActionsClass.call({
-    generateActions: function () {
+    generateActions: function generateActions() {
       var actionNames = _slice.call(arguments);
 
       actionNames.forEach(function (actionName) {
@@ -121,7 +121,7 @@ Fluxd.prototype.createAdapter = function (AdapterClass) {
   var config = {};
 
   AdapterClass.call({
-    configure: function (params) {
+    configure: function configure(params) {
       Object.assign(config, params);
     }
   });

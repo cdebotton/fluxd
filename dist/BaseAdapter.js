@@ -23,8 +23,8 @@ var TIMEOUT = 10000;
 
 var BaseAdapter = function BaseAdapter() {};
 
-BaseAdapter.prototype.find = function (id) {
-  if (id === undefined) id = null;
+BaseAdapter.prototype.find = function () {
+  var id = arguments[0] === undefined ? null : arguments[0];
   var url = makeUrl(this[ADAPTER_ROOT], this[ADAPTER_RESOURCE], id);
   this.dispatch(ADAPTER_PENDING);
 
@@ -33,8 +33,8 @@ BaseAdapter.prototype.find = function (id) {
   return generatePromise(request, this.dispatch.bind(this), this[ADAPTER_RESOURCE]);
 };
 
-BaseAdapter.prototype.save = function (params) {
-  if (params === undefined) params = {};
+BaseAdapter.prototype.save = function () {
+  var params = arguments[0] === undefined ? {} : arguments[0];
   var parts = [this[ADAPTER_ROOT], this[ADAPTER_RESOURCE]];
 
   if (params.id) parts.push(params.id);
@@ -46,8 +46,8 @@ BaseAdapter.prototype.save = function (params) {
   return generatePromise(request, this.dispatch.bind(this), this[ADAPTER_RESOURCE]);
 };
 
-BaseAdapter.prototype.destroy = function (id) {
-  if (id === undefined) id = null;
+BaseAdapter.prototype.destroy = function () {
+  var id = arguments[0] === undefined ? null : arguments[0];
   var url = makeUrl(this[ADAPTER_ROOT], this[ADAPTER_RESOURCE], id);
   var request = Request.del(url);
 

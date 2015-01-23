@@ -6,7 +6,7 @@ var ACTION_BINDING = require("../Symbols").ACTION_BINDING;
 
 
 var StorePrototype = {
-  bindAction: function (symbol, handler) {
+  bindAction: function bindAction(symbol, handler) {
     if (!symbol) {
       throw new ReferenceError("Invalid action reference");
     }
@@ -25,7 +25,7 @@ var StorePrototype = {
     }
   },
 
-  bindActions: function (actions) {
+  bindActions: function bindActions(actions) {
     var _this = this;
     Object.keys(actions).forEach(function (action) {
       var symbol = actions[action];
@@ -49,7 +49,7 @@ var StorePrototype = {
     });
   },
 
-  waitFor: function (tokens) {
+  waitFor: function waitFor(tokens) {
     if (!tokens) {
       throw new ReferenceError("Dispatch tokens not provided");
     }
