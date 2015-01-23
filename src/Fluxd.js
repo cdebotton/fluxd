@@ -3,7 +3,6 @@ import BaseAdapter from './BaseAdapter';
 import BaseStore from './BaseStore';
 import formatAsResource from './utils/formatAsResource';
 import formatAsConstant from './utils/formatAsConstant';
-import AdapterPrototype from './utils/AdapterPrototype';
 import StorePrototype from './utils/StorePrototype';
 import Symbol from './polyfills/es6-symbol';
 import {Dispatcher} from 'flux';
