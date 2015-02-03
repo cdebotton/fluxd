@@ -23,14 +23,8 @@
   "devDependencies": {
     "6to5": "^2.13.5",
     "gulp": "^3.8.10",
-<<<<<<< HEAD
-    "gulp-6to5": "^3.0.0",
-    "gulp-plumber": "^0.6.6"
-=======
     "gulp-6to5": "^2.0.0",
-    "gulp-plumber": "^0.6.6",
-    "pruno": "^1.9.0"
->>>>>>> b492cd8b7b27190dde429919a9baf6683ec74d82
+    "gulp-plumber": "^0.6.6"
   },
   "dependencies": {
     "bluebird": "^2.5.3",
