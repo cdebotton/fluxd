@@ -6,7 +6,6 @@ var Flux = _interopRequire(require("./Fluxd"));
 
 var StoreListenerMixin = _interopRequire(require("./StoreListener"));
 
-// import RESTAdapter from './RESTAdapter';
 var Constants = _interopRequire(require("./Symbols"));
 
 var fetchData = _interopRequire(require("./utils/fetchData"));
