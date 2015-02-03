@@ -1,8 +1,6 @@
 "use strict";
 
-var _interopRequire = function (obj) {
-  return obj && (obj["default"] || obj);
-};
+var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
 
 var Symbol = _interopRequire(require("./polyfills/es6-symbol"));
 
@@ -32,3 +30,4 @@ var STORES_STORE = exports.STORES_STORE = Symbol("stores storage");
 var MIXIN_REGISTRY = exports.MIXIN_REGISTRY = Symbol("_fluxd store listener registry_");
 var STATE_CONTAINER = exports.STATE_CONTAINER = VariableSymbol("fluxd state container");
 var BOOTSTRAP_FLAG = exports.BOOTSTRAP_FLAG = VariableSymbol("have you bootstrapped yet?");
+exports.__esModule = true;

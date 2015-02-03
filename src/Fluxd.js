@@ -3,7 +3,6 @@ import BaseAdapter from './BaseAdapter';
 import BaseStore from './BaseStore';
 import formatAsResource from './utils/formatAsResource';
 import formatAsConstant from './utils/formatAsConstant';
-import AdapterPrototype from './utils/AdapterPrototype';
 import StorePrototype from './utils/StorePrototype';
 import Symbol from './polyfills/es6-symbol';
 import {Dispatcher} from 'flux';
@@ -63,15 +62,15 @@ export default class Fluxd {
       getInternalMethods(ActionsClass.prototype, builtInProto)
     );
 
-    ActionsClass.call({
-      generateActions(...actionNames) {
-        actionNames.forEach(actionName => {
-          actions[actionName] = function(x, ...a) {
-            this.dispatch(a.length ? [x].concat(a) : x);
-          }
-        });
-      }
-    });
+    ActionsClass.prototype.generateActions = (...actionNames) => {
+      actionNames.forEach(actionName => {
+        actions[actionName] = function(x, ...a) {
+          this.dispatch(a.length ? [x].concat(a) : x);
+        }
+      });
+    };
+
+    new ActionsClass();
 
     return Object.keys(actions).reduce((obj, action) => {
       var constant = formatAsConstant(action);
