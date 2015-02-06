@@ -1,6 +1,8 @@
 "use strict";
 
-var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
+var _interopRequire = function (obj) {
+  return obj && (obj["default"] || obj);
+};
 
 var Flux = _interopRequire(require("./Fluxd"));
 
@@ -14,4 +16,3 @@ exports.Flux = Flux;
 exports.StoreListenerMixin = StoreListenerMixin;
 exports.Constants = Constants;
 exports.fetchData = fetchData;
-exports.__esModule = true;

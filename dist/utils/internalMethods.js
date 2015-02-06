@@ -1,6 +1,8 @@
 "use strict";
 
-var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
+var _interopRequire = function (obj) {
+  return obj && (obj["default"] || obj);
+};
 
 var NoopClass = _interopRequire(require("./noop"));
 
@@ -21,4 +23,3 @@ var getInternalMethods = function (obj, excluded) {
 exports.builtIns = builtIns;
 exports.builtInProto = builtInProto;
 exports.getInternalMethods = getInternalMethods;
-exports.__esModule = true;
