@@ -66,15 +66,17 @@ Fluxd.prototype.createStore = function (StoreModel, iden) {
 
   var store = new Store();
 
-  if (this[STORES_STORE][key]) {
-    var message = "A store named " + key + " already exists, double check your " + "store names or pass in your own custom identifier for each store";
+  // if (this[STORES_STORE][key]) {
+  //   var message = `A store named ${key} already exists, double check your ` +
+  //   `store names or pass in your own custom identifier for each store`;
 
-    if (process.env.NODE_ENV === "development") {
-      console.warn(message);
-    } else {
-      throw new ReferenceError(message);
-    }
-  }
+  //   if (process.env.NODE_ENV === 'development') {
+  //     console.warn(message);
+  //   }
+  //   else {
+  //     throw new ReferenceError(message);
+  //   }
+  // }
 
   return this[STORES_STORE][key] = Object.assign(new BaseStore(this.dispatcher, store), getInternalMethods(StoreModel, builtIns));
 };
