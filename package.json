@@ -1,6 +1,6 @@
 {
   "name": "fluxd",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "A fully featured ES6 implementation of Flux with API Adapters",
   "main": "./dist/index.js",
   "scripts": {
