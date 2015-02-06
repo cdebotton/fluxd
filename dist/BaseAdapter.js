@@ -1,64 +1,87 @@
 "use strict";
 
-var _slice = Array.prototype.slice;
-var _interopRequire = function (obj) {
-  return obj && (obj["default"] || obj);
-};
+var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
+
+var _prototypeProperties = function (child, staticProps, instanceProps) { if (staticProps) Object.defineProperties(child, staticProps); if (instanceProps) Object.defineProperties(child.prototype, instanceProps); };
+
+var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
 var Promise = _interopRequire(require("bluebird"));
 
 var Request = _interopRequire(require("superagent"));
 
 var flux = require("../").flux;
-var ACTION_DISPATCHER = require("./Symbols").ACTION_DISPATCHER;
-var ADAPTER_ROOT = require("./Symbols").ADAPTER_ROOT;
-var ADAPTER_RESOURCE = require("./Symbols").ADAPTER_RESOURCE;
-var ADAPTER_PENDING = require("./Symbols").ADAPTER_PENDING;
-var ADAPTER_ERROR = require("./Symbols").ADAPTER_ERROR;
-var ADAPTER_BAD_REQUEST = require("./Symbols").ADAPTER_BAD_REQUEST;
-var ADAPTER_TIMEOUT = require("./Symbols").ADAPTER_TIMEOUT;
+var _Symbols = require("./Symbols");
+
+var ACTION_DISPATCHER = _Symbols.ACTION_DISPATCHER;
+var ADAPTER_ROOT = _Symbols.ADAPTER_ROOT;
+var ADAPTER_RESOURCE = _Symbols.ADAPTER_RESOURCE;
+var ADAPTER_PENDING = _Symbols.ADAPTER_PENDING;
+var ADAPTER_ERROR = _Symbols.ADAPTER_ERROR;
+var ADAPTER_BAD_REQUEST = _Symbols.ADAPTER_BAD_REQUEST;
+var ADAPTER_TIMEOUT = _Symbols.ADAPTER_TIMEOUT;
 
 
 var TIMEOUT = 10000;
 
-var BaseAdapter = function BaseAdapter() {};
+var BaseAdapter = (function () {
+  function BaseAdapter() {
+    _classCallCheck(this, BaseAdapter);
+  }
 
-BaseAdapter.prototype.find = function () {
-  var id = arguments[0] === undefined ? null : arguments[0];
-  var url = makeUrl(this[ADAPTER_ROOT], this[ADAPTER_RESOURCE], id);
-  this.dispatch(ADAPTER_PENDING);
+  _prototypeProperties(BaseAdapter, null, {
+    find: {
+      value: function find() {
+        var id = arguments[0] === undefined ? null : arguments[0];
+        var url = makeUrl(this[ADAPTER_ROOT], this[ADAPTER_RESOURCE], id);
+        this.dispatch(ADAPTER_PENDING);
 
-  var request = Request.get(url);
+        var request = Request.get(url);
 
-  return generatePromise(request, this.dispatch.bind(this), this[ADAPTER_RESOURCE]);
-};
+        return generatePromise(request, this.dispatch.bind(this), this[ADAPTER_RESOURCE]);
+      },
+      writable: true,
+      configurable: true
+    },
+    save: {
+      value: function save() {
+        var params = arguments[0] === undefined ? {} : arguments[0];
+        var parts = [this[ADAPTER_ROOT], this[ADAPTER_RESOURCE]];
 
-BaseAdapter.prototype.save = function () {
-  var params = arguments[0] === undefined ? {} : arguments[0];
-  var parts = [this[ADAPTER_ROOT], this[ADAPTER_RESOURCE]];
+        if (params.id) parts.push(params.id);
+        this.dispatch(ADAPTER_PENDING);
 
-  if (params.id) parts.push(params.id);
-  this.dispatch(ADAPTER_PENDING);
+        var url = makeUrl.apply(null, parts);
+        var request = !params.id ? Request.post(url).send(params) : Request.put(url).send(params);
 
-  var url = makeUrl.apply(null, parts);
-  var request = !params.id ? Request.post(url).send(params) : Request.put(url).send(params);
+        return generatePromise(request, this.dispatch.bind(this), this[ADAPTER_RESOURCE]);
+      },
+      writable: true,
+      configurable: true
+    },
+    destroy: {
+      value: function destroy() {
+        var id = arguments[0] === undefined ? null : arguments[0];
+        var url = makeUrl(this[ADAPTER_ROOT], this[ADAPTER_RESOURCE], id);
+        var request = Request.del(url);
 
-  return generatePromise(request, this.dispatch.bind(this), this[ADAPTER_RESOURCE]);
-};
+        return generatePromise(request, this.dispatch.bind(this), this[ADAPTER_RESOURCE]);
+      },
+      writable: true,
+      configurable: true
+    }
+  });
 
-BaseAdapter.prototype.destroy = function () {
-  var id = arguments[0] === undefined ? null : arguments[0];
-  var url = makeUrl(this[ADAPTER_ROOT], this[ADAPTER_RESOURCE], id);
-  var request = Request.del(url);
-
-  return generatePromise(request, this.dispatch.bind(this), this[ADAPTER_RESOURCE]);
-};
+  return BaseAdapter;
+})();
 
 module.exports = BaseAdapter;
 
 
 var makeUrl = function () {
-  var parts = _slice.call(arguments);
+  for (var _len = arguments.length, parts = Array(_len), _key = 0; _key < _len; _key++) {
+    parts[_key] = arguments[_key];
+  }
 
   return parts.filter(function (p) {
     return !!p;

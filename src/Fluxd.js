@@ -67,15 +67,15 @@ export default class Fluxd {
       getInternalMethods(ActionsClass.prototype, builtInProto)
     );
 
-    ActionsClass.call({
-      generateActions(...actionNames) {
-        actionNames.forEach(actionName => {
-          actions[actionName] = function(x, ...a) {
-            this.dispatch(a.length ? [x].concat(a) : x);
-          }
-        });
-      }
-    });
+    ActionsClass.prototype.generateActions = (...actionNames) => {
+      actionNames.forEach(actionName => {
+        actions[actionName] = function(x, ...a) {
+          this.dispatch(a.length ? [x].concat(a) : x);
+        }
+      });
+    };
+
+    new ActionsClass();
 
     return Object.keys(actions).reduce((obj, action) => {
       var constant = formatAsConstant(action);

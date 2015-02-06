@@ -1,12 +1,17 @@
 'use strict';
 
-var pruno = require('pruno')
-       .use(require('gulp'));
+var gulp = require('gulp');
+var to5 = require('gulp-6to5');
+var plumber = require('gulp-plumber');
 
-require('./mixes/to5Task');
+gulp.task('js', function() {
+  gulp.src('./src/**/*.js')
+    .pipe(to5())
+    .pipe(plumber())
+    .pipe(gulp.dest('./dist/'));
+});
 
-pruno(function(mix) {
-  mix
-    .del('./dist')
-    .to5();
+gulp.task('default', ['js']);
+gulp.task('watch', function() {
+  gulp.watch(['./src/**/*.js'], ['default']);
 });

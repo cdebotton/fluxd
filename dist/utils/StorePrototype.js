@@ -1,8 +1,10 @@
 "use strict";
 
-var ACTION_KEY = require("../Symbols").ACTION_KEY;
-var LISTENERS = require("../Symbols").LISTENERS;
-var ACTION_BINDING = require("../Symbols").ACTION_BINDING;
+var _Symbols = require("../Symbols");
+
+var ACTION_KEY = _Symbols.ACTION_KEY;
+var LISTENERS = _Symbols.LISTENERS;
+var ACTION_BINDING = _Symbols.ACTION_BINDING;
 
 
 var StorePrototype = {

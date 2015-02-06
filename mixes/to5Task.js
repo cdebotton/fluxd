@@ -1,8 +1,14 @@
 'use strict';
 
+<<<<<<< HEAD
+let pruno = require('pruno');
+let to5 = require('gulp-6to5');
+let plumber = require('gulp-plumber');
+=======
 var pruno = require('pruno');
 var to5 = require('gulp-6to5');
 var plumber = require('gulp-plumber');
+>>>>>>> b492cd8b7b27190dde429919a9baf6683ec74d82
 
 function to5Task(params) {
   this.params = params;
